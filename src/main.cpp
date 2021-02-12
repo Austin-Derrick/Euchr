@@ -24,12 +24,30 @@ void Player::Set_Hand(){
 }
 
 int main() {
+    Player players[4];
+    string suits[4] = {"Hearts", "Diamonds", "Clubs", "Spades"};
     Card deck [52];
-    for(int i = 0; i < 52; i++){
-        deck[i].intializeCard(i, "Hearts");
+    int index = 0;
+
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 13; j++){
+            deck[index].intializeCard(j, suits[i]);
+            index++;
+        }
     }
-    for(int i = 0; i < 52; i++){
-        std::cout<<deck[i].value<< std::endl;
-        std::cout<<deck[i].suit<< std::endl;    
+    
+    index = 0;
+    for(int i = 0; i < 4; i++){
+        players[i].name = ("Player " + i);
+        for(int j = 0; j < 5; j++){
+            players[i].hand[j] = deck[index];
+            std::cout<<players[i].hand[j].value << " of " << players[i].hand[j].suit <<std::endl;
+            index++;
+        }
     }
+
+    // for(int i = 0; i < 4; i++){
+    //     std::cout<<deck[i].value<< std::endl;
+    //     std::cout<<deck[i].suit<< std::endl;    
+    // }
 }   
