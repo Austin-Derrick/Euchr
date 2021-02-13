@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 using std::string;
 
 class Card{
@@ -23,6 +24,14 @@ void Player::Set_Hand(){
 
 }
 
+void showTopCard(Card * deck){
+    std::cout<<deck[0].value << " of " << deck[0].suit << std::endl;
+}
+
+void shuffleDeck(Card * deck){
+    std::random_shuffle(&deck[0], &deck[52]);
+}
+
 int main() {
     Player players[4];
     string suits[4] = {"Hearts", "Diamonds", "Clubs", "Spades"};
@@ -35,19 +44,20 @@ int main() {
             index++;
         }
     }
-    
+
     index = 0;
     for(int i = 0; i < 4; i++){
         players[i].name = ("Player " + i);
         for(int j = 0; j < 5; j++){
             players[i].hand[j] = deck[index];
-            std::cout<<players[i].hand[j].value << " of " << players[i].hand[j].suit <<std::endl;
+            //  std::cout<<players[i].hand[j].value << " of " << players[i].hand[j].suit <<std::endl;
             index++;
         }
     }
 
-    // for(int i = 0; i < 4; i++){
-    //     std::cout<<deck[i].value<< std::endl;
-    //     std::cout<<deck[i].suit<< std::endl;    
-    // }
+    showTopCard(deck);
+    shuffleDeck(deck);
+    showTopCard(deck);
+
 }   
+
