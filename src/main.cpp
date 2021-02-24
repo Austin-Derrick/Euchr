@@ -93,7 +93,7 @@ float getHandWeight(vector<Card> hand, int TRUMP_SUIT){
     float weight = 0;
 
     float temp = 0;
-
+    
     for(int i = 0; i < hand.size(); i++){
         temp = hand[i].value;
         if (hand[i].value == 11)
@@ -109,12 +109,18 @@ float getHandWeight(vector<Card> hand, int TRUMP_SUIT){
         }
         else if (hand[i].suit == TRUMP_SUIT)
         {
-            temp = hand[i].value + 6;
+            if (hand[i].suit == 14)
+            {
+                temp = hand[i].value + 5;
+            }
+            else{
+                temp = hand[i].value + 6;
+            }
         }
         
         weight += temp;
     }
-    
+
     return weight / 95;
 }
 
