@@ -84,10 +84,35 @@ void shuffleDeck(Deck& deck){
     std::random_shuffle(deck.cards.begin(), deck.cards.end());
 }
 
+bool askContinueGame(){
+    int choice_01 = 0;
+    std::cout<<"Would you like to begin the game?"<<std::endl<<"1) - yes"<<std::endl<<"2) - no)"<<std::endl;
+    std::cin>>choice_01;
+    return choice_01 == 1 ? true : false;
+}
+
+float getHandWeight(vector<Card> hand){
+    float weight = 0;
+    for(int i = 0; i < hand.size(); i++){
+        weight += hand[i].value;
+    }
+    return weight / 71;
+}
+
+void redeal(Player *players, Deck& deck){
+    initializeDeck(deck);
+    shuffleDeck(deck);
+    for(int i = 0; i < 4; i++){
+        players[i].setHand(deck);
+        std::cout<<""<<std::endl;
+        players[i].printHand();
+    }
+}
+
 int main() {
     Deck deck;
     initializeDeck(deck);
-    printDeck(deck);
+    // printDeck(deck);
 
     Player players[4];
 
@@ -96,4 +121,16 @@ int main() {
         std::cout<<""<<std::endl;
         players[i].printHand();
     }
+    bool isPlaying = false;
+
+    while (askContinueGame())
+    {
+        redeal(players, deck);
+        for(int i = 0; i < 4; i++){
+            std::cout<<getHandWeight(players[i].hand)<<std::endl;
+        }
+    }
+    
+    std::cout<<"Thank you for playing"<<std::endl;
+
 }
