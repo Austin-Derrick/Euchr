@@ -61,12 +61,10 @@ void Player::printHand(){
 void initializeDeck(Deck& deck){
     for(int i = 0; i < 4; i++){
         for(int j = 9; j <= 14; j++){
-            
             deck.cards.push_back(Card(Rank(j), Suit(i)));
         }
     }
 }
-
 
 // Prints the Card Vector inside of a Deck Struct
 void printDeck(const Deck& deck){
@@ -91,12 +89,33 @@ bool askContinueGame(){
     return choice_01 == 1 ? true : false;
 }
 
-float getHandWeight(vector<Card> hand){
+float getHandWeight(vector<Card> hand, int TRUMP_SUIT){
     float weight = 0;
+
+    float temp = 0;
+
     for(int i = 0; i < hand.size(); i++){
-        weight += hand[i].value;
+        temp = hand[i].value;
+        if (hand[i].value == 11)
+        {
+            if ((TRUMP_SUIT / 4 >= 0.5) && (hand[i].suit / 4 >= 5))
+            {
+                temp = hand[i].suit == TRUMP_SUIT ? 21:20;
+            }
+            else if ((TRUMP_SUIT / 4 <= 0.5) && (hand[i].suit / 4 <= 5))
+            {
+                temp = hand[i].suit == TRUMP_SUIT ? 21:20;
+            }
+        }
+        else if (hand[i].suit == TRUMP_SUIT)
+        {
+            temp = hand[i].value + 6;
+        }
+        
+        weight += temp;
     }
-    return weight / 71;
+    
+    return weight / 95;
 }
 
 void redeal(Player *players, Deck& deck){
@@ -122,15 +141,22 @@ int main() {
         players[i].printHand();
     }
     bool isPlaying = false;
-
+    bool isTrumpDecided = false;
     while (askContinueGame())
     {
         redeal(players, deck);
-        for(int i = 0; i < 4; i++){
-            std::cout<<getHandWeight(players[i].hand)<<std::endl;
+        for(int i = 0; i < 4; i++){ 
+            if (!isTrumpDecided)
+            {
+                isTrumpDecided = getHandWeight(players[i].hand, 0) > 0.75 ? true : false;
+            }
+            
+            else{
+                break;
+            }
+            
+            std::cout<<getHandWeight(players[i].hand, 0)<<std::endl;
         }
     }
-    
     std::cout<<"Thank you for playing"<<std::endl;
-
 }
