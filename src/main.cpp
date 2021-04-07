@@ -2,60 +2,14 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "Player.cpp"
+#include "Deck.cpp"
+#include "Card.cpp"
 using std::string;
 using std::vector;
-    
-enum Rank {NINE = 9, TEN, JACK, QUEEN, KING, ACE, TRUMP};
-enum Suit {SPADES, CLUBS, DIAMONDS, HEARTS};
-
-class Card{
-    public: 
-        Rank value;
-        Suit suit;
-        Card(Rank VAL, Suit SUIT);
-};
-
-Card::Card( Rank VAL, Suit SUIT) { this->value = VAL; this->suit = SUIT;}
-
-struct Deck
-{
-    vector <Card> cards;
-    int MAX_SIZE = 24;
-};
 
 // Prints a passed through card's value and suit
-void printCard(const Card& card) { std::cout<<card.value << " of " << card.suit <<std::endl; }
-
-class Player{
-    public:
-        string name;
-        vector<Card> hand;
-        Player();
-        void setHand(Deck& deck);
-        void printHand();
-};
-
-Player::Player(){
-    for(int i = 0; i < 6; i++){
-        hand.push_back(Card(Rank(), Suit()));
-    }
-}
-
-void Player::setHand(Deck& deck){
-    hand.clear();
-    for(int i = 0; i < 5; i++){
-        hand.push_back(deck.cards.back());
-        deck.cards.pop_back();
-    }
-}
-
-void Player::printHand(){
-    for (int i = 0; i < hand.size(); i++)
-    {
-        printCard(hand[i]);
-    }
-    
-}
+//void printCard(const Card& card) { std::cout<<card.value << " of " << card.suit <<std::endl; }
 
 // Organizes a Card vector inside of a deck struct
 void initializeDeck(Deck& deck){
