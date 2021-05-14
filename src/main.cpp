@@ -120,6 +120,7 @@ void playTrick(Player* players, int &trumpSuit){
     
     for (int i = 0; i < 4; i++)
     {
+        std::cout<<"Player "<< i << " plays " << players[i].hand[0].value<< " Of " << players[i].hand[0].suit <<std::endl;//
         cardToPlay = &players[i].hand[0];
         for (int j = 0; j < players[i].hand.size(); j++)
         {
@@ -128,6 +129,12 @@ void playTrick(Player* players, int &trumpSuit){
                 cardToPlay = &players[i].hand[j];
             }
         }
+        
+        //std::cout<<players[i].hand.size()<<std::endl;
+        players[i].hand.erase(players[i].hand.begin() + i);
+        //std::cout<<players[i].hand.size()<<std::endl;
+
+        // std::cout<<"Player "<< i << " plays " << players[i].hand[0].value<< " Of " << players[i].hand[0].suit <<std::endl;//
         //std::cout<<"Player "<< i << " plays " << cardToPlay->value<< " Of " << cardToPlay->suit <<std::endl;//
         cardsInTrick[i] = cardToPlay;
     }
@@ -143,10 +150,11 @@ void playTrick(Player* players, int &trumpSuit){
             highestCard = cardsInTrick[i];
             highestPlayer = i;
         }
-        std::cout<<cardsInTrick[i]->value<< " OF " << cardsInTrick[i]->suit << " WEIGHT OF - "<< cardsInTrick[i]->weight <<std::endl;
+        // std::cout<<cardsInTrick[i]->value<< " OF " << cardsInTrick[i]->suit << " WEIGHT OF - "<< cardsInTrick[i]->weight <<std::endl;
     }
-
-    std::cout<<highestCard->value<< " OF " << highestCard->suit << " WEIGHT OF - "<< highestCard->weight <<std::endl;
+    // std::cout<<"WINNER : PLAYER "<<highestPlayer<<std::endl;
+    // std::cout<<highestCard->value<< " OF " << highestCard->suit << " WEIGHT OF - "<< highestCard->weight <<std::endl;
+    // std::cout<<""<< std::endl;
 }
 
 int main() {
@@ -168,7 +176,12 @@ int main() {
         redeal(players, deck);
         redeal(players, deck);
         trumpSuit = decideTrumpCard(players, deck);
-        playTrick(players, trumpSuit);
+        while (players[0].hand.size() > 0)
+        {
+            playTrick(players, trumpSuit);
+        }
+        
+        
     }
     std::cout<<"Thank you for playing"<<std::endl;
 }
