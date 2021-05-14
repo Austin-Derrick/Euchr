@@ -11,6 +11,7 @@ class Player{
     public:
         string name;
         vector<Card> hand;
+        float handWeight;
         Player();
         ~Player();
         void setHand(Deck& deck);

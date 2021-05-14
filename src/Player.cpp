@@ -5,6 +5,7 @@ Player::Player(){
     for(int i = 0; i < 6; i++){
         hand.push_back(Card(Rank(), Suit()));
     }
+    handWeight = 0;
 }
 
 Player::~Player(){

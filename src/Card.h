@@ -7,5 +7,7 @@ class Card{
     public: 
         Rank value;
         Suit suit;
+        int weight;
         Card(Rank VAL, Suit SUIT);
+        Card();
 };
