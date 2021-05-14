@@ -43,7 +43,7 @@ bool askContinueGame(){
     return choice_01 == 1 ? true : false;
 }
 
-float getHandWeight(vector<Card> hand, int TRUMP_SUIT){
+float getHandWeight(vector<Card> &hand, int TRUMP_SUIT){
     float weight = 0;
 
     //float temp = 0;
@@ -52,11 +52,11 @@ float getHandWeight(vector<Card> hand, int TRUMP_SUIT){
         hand[i].weight = hand[i].value;
         if (hand[i].value == 11)
         {
-            if ((TRUMP_SUIT / 4 >= 0.5) && (hand[i].suit / 4 >= 5))
+            if (((float)TRUMP_SUIT / 4 >= 0.5) && ((float)hand[i].suit / 4 >= 5))
             {
                 hand[i].weight = hand[i].suit == TRUMP_SUIT ? 21:20;
             }
-            else if ((TRUMP_SUIT / 4 <= 0.5) && (hand[i].suit / 4 <= 5))
+            else if (((float)TRUMP_SUIT / 4 <= 0.5) && ((float)hand[i].suit / 4 <= 5))
             {
                 hand[i].weight = hand[i].suit == TRUMP_SUIT ? 21:20;
             }
@@ -71,7 +71,7 @@ float getHandWeight(vector<Card> hand, int TRUMP_SUIT){
                 hand[i].weight = hand[i].value + 6;
             }
         }
-        std::cout<<hand[i].value << " " << hand[i].weight<<std::endl;
+        //std::cout<<hand[i].value << " " << hand[i].weight<<std::endl;
         weight += hand[i].weight;
     }
     //std::cout<<weight<<std::endl;
@@ -84,8 +84,8 @@ void redeal(Player *players, Deck& deck){
     shuffleDeck(deck);
     for(int i = 0; i < 4; i++){
         players[i].setHand(deck);
-        std::cout<<""<<std::endl;
-        players[i].printHand();
+        //std::cout<<""<<std::endl;
+        //players[i].printHand();
     }
 }
 
@@ -96,20 +96,20 @@ int decideTrumpCard(Player *players, Deck &deck){
     for (int i = 0; i < 4; i++)
     {
         players[i].handWeight = getHandWeight(players[i].hand, trumpSuit);
-        std::cout<<"Player "<< i + 1 << " Hand weight: "<< players[i].handWeight <<std::endl;
+        //std::cout<<"Player "<< i + 1 << " Hand weight: "<< players[i].handWeight <<std::endl;
     }
     
     for(int i = 0; i < 4; i++)
     { 
         if (players[i].handWeight > 0.75f)
         {
-            std::cout<<"Player "<< i + 1 << "Chose the trump" <<std::endl;
+            //std::cout<<"Player "<< i + 1 << "Chose the trump" <<std::endl;
             return trumpSuit;
         }
         else{
             continue;
         }
-        std::cout<<"Player "<< i + 1 << "passed" <<std::endl;
+        //std::cout<<"Player "<< i + 1 << "passed" <<std::endl;
     }
     return trumpSuit;
 }
@@ -123,26 +123,30 @@ void playTrick(Player* players, int &trumpSuit){
         cardToPlay = &players[i].hand[0];
         for (int j = 0; j < players[i].hand.size(); j++)
         {
-            if (players[i].hand[j].suit == trumpSuit)
+            if (players[i].hand[j].weight > cardToPlay->weight)
             {
-                if (players[i].hand[j].weight > cardToPlay->weight)
-                {
-                    cardToPlay = &players[i].hand[j];
-                }
-                else{
-                    cardToPlay = &players[i].hand[j];
-                }
+                cardToPlay = &players[i].hand[j];
             }
         }
         //std::cout<<"Player "<< i << " plays " << cardToPlay->value<< " Of " << cardToPlay->suit <<std::endl;//
         cardsInTrick[i] = cardToPlay;
     }
 
+    Card *highestCard;
+    highestCard = cardsInTrick[0];
+    int highestPlayer = 0;
+
     for (int i = 0; i < 4; i++)
     {
+        if (highestCard->weight < cardsInTrick[i]->weight)
+        {
+            highestCard = cardsInTrick[i];
+            highestPlayer = i;
+        }
         std::cout<<cardsInTrick[i]->value<< " OF " << cardsInTrick[i]->suit << " WEIGHT OF - "<< cardsInTrick[i]->weight <<std::endl;
     }
-    
+
+    std::cout<<highestCard->value<< " OF " << highestCard->suit << " WEIGHT OF - "<< highestCard->weight <<std::endl;
 }
 
 int main() {
@@ -161,8 +165,6 @@ int main() {
     bool isPlaying = false;
     while (askContinueGame())
     {
-        redeal(players, deck);
-        redeal(players, deck);
         redeal(players, deck);
         redeal(players, deck);
         trumpSuit = decideTrumpCard(players, deck);
