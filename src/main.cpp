@@ -92,7 +92,7 @@ void redeal(Player *players, Deck& deck){
 int decideTrumpCard(Player *players, Deck &deck){
     bool isTrumpDecided = false;
     int trumpSuit = deck.cards[0].suit;
-    std::cout<<trumpSuit<<std::endl;
+    std::cout<<"TRUMP SUIT: "<<trumpSuit<<std::endl;
     for (int i = 0; i < 4; i++)
     {
         players[i].handWeight = getHandWeight(players[i].hand, trumpSuit);
@@ -115,45 +115,50 @@ int decideTrumpCard(Player *players, Deck &deck){
 }
 
 void playTrick(Player* players, int &trumpSuit){
-    Card *cardToPlay;
-    Card *cardsInTrick[4];
-    
+    Card cardToPlay;
+    Card cardsInTrick[4];
+    int highestCardPos = 0;
     for (int i = 0; i < 4; i++)
     {
-        std::cout<<"Player "<< i << " plays " << players[i].hand[0].value<< " Of " << players[i].hand[0].suit <<std::endl;//
-        cardToPlay = &players[i].hand[0];
+        //std::cout<<"Player "<< i << " plays " << players[i].hand[0].value<< " Of " << players[i].hand[0].suit <<std::endl;//
+        cardToPlay = players[i].hand[0];
         for (int j = 0; j < players[i].hand.size(); j++)
         {
-            if (players[i].hand[j].weight > cardToPlay->weight)
+            //std::cout<<"Player "<< i << " plays " << players[i].hand[j].value<< " Of " << players[i].hand[j].suit <<std::endl;
+            if (players[i].hand[j].weight > cardToPlay.weight)
             {
-                cardToPlay = &players[i].hand[j];
+                //std::cout<<"CHANGE"<<std::endl;
+                cardToPlay = players[i].hand[j];
+                highestCardPos = j;
+                // std::cout<<"Player "<< i << " plays " << cardToPlay.value<< " Of " << cardToPlay.suit <<std::endl;//
+                // std::cout<<""<<std::endl;
             }
         }
         
         //std::cout<<players[i].hand.size()<<std::endl;
-        players[i].hand.erase(players[i].hand.begin() + i);
+        players[i].hand.erase(players[i].hand.begin() + highestCardPos);
         //std::cout<<players[i].hand.size()<<std::endl;
 
-        // std::cout<<"Player "<< i << " plays " << players[i].hand[0].value<< " Of " << players[i].hand[0].suit <<std::endl;//
-        //std::cout<<"Player "<< i << " plays " << cardToPlay->value<< " Of " << cardToPlay->suit <<std::endl;//
+        //std::cout<<"Player "<< i << " plays " << players[i].hand[i].value<< " Of " << players[i].hand[0].suit <<std::endl;//
+        //std::cout<<"Player "<< i << " plays " << cardToPlay.value<< " Of " << cardToPlay.suit <<std::endl;//
         cardsInTrick[i] = cardToPlay;
     }
 
-    Card *highestCard;
+    Card highestCard;
     highestCard = cardsInTrick[0];
     int highestPlayer = 0;
 
     for (int i = 0; i < 4; i++)
     {
-        if (highestCard->weight < cardsInTrick[i]->weight)
+        if (highestCard.weight < cardsInTrick[i].weight)
         {
             highestCard = cardsInTrick[i];
-            highestPlayer = i;
+            highestPlayer = i + 1;
         }
-        // std::cout<<cardsInTrick[i]->value<< " OF " << cardsInTrick[i]->suit << " WEIGHT OF - "<< cardsInTrick[i]->weight <<std::endl;
+        std::cout<<"\t"<<"Player "<<i + 1<<" plays - "<<cardsInTrick[i].value<< " OF " << cardsInTrick[i].suit << " WEIGHT OF - "<< cardsInTrick[i].weight <<std::endl;
     }
-    // std::cout<<"WINNER : PLAYER "<<highestPlayer<<std::endl;
-    // std::cout<<highestCard->value<< " OF " << highestCard->suit << " WEIGHT OF - "<< highestCard->weight <<std::endl;
+    std::cout<<"WINNER : PLAYER "<<highestPlayer<<std::endl;
+    std::cout<<highestCard.value<< " OF " << highestCard.suit << " WEIGHT OF - "<< highestCard.weight <<std::endl;
     // std::cout<<""<< std::endl;
 }
 
@@ -180,7 +185,23 @@ int main() {
         {
             playTrick(players, trumpSuit);
         }
-        
+        // for (int i = 0; i < 4; i++)
+        // {
+        //     std::cout<<"BEFORE: "<<std::endl;
+        //     for (int j = 0; j < players[i].hand.size(); j++)
+        //     {
+        //         std::cout<<players[i].hand[j].value<< " OF "<< players[i].hand[j].suit<<std::endl;
+        //     }
+
+        //     players[i].hand.erase(players[i].hand.begin() + i);
+
+        //     std::cout<<"AFTER: "<<std::endl;
+        //     for (int j = 0; j < players[i].hand.size(); j++)
+        //     {
+        //         std::cout<<players[i].hand[j].value<< " OF "<< players[i].hand[j].suit<<std::endl;
+        //     }
+        //     std::cout<<""<<std::endl;
+        // }
         
     }
     std::cout<<"Thank you for playing"<<std::endl;
